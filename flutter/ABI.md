@@ -2,7 +2,6 @@
 
 > Dokumen ini menjelaskan secara mendalam mengenai konsep **ABI (Application Binary Interface)** dalam konteks pengembangan aplikasi Android menggunakan **Flutter**.  
 Materi ini mencakup pengertian ABI, jenis-jenis ABI yang digunakan Android, hubungannya dengan sistem build Flutter, serta strategi optimasi ukuran aplikasi.
-
 ---
 ## Daftar Isi
 - [Pengertian ABI](#1-pengertian-abi)
@@ -17,21 +16,34 @@ Materi ini mencakup pengertian ABI, jenis-jenis ABI yang digunakan Android, hubu
 - [Optimasi Ukuran APK Berdasarkan ABI](#10-optimasi-ukuran-apk-berdasarkan-abi)
 - [Diagram Proses Build Flutter dan ABI](#11-diagram-proses-build-flutter-dan-abi)
 - [Skrip Otomatis Build dan Instalasi](#12-skrip-otomatis-build-dan-instalasi)
-- [Referensi](#13-referensi)
+- [Glosarium / Istilah](#13-glosarium-istilah)
+- [Referensi](#14-referensi)
 ---
 ## 1. Pengertian ABI
-
-**Application Binary Interface (ABI)** adalah perantara antara aplikasi dan sistem operasi yang menentukan bagaimana kode biner (*native code*, biasanya berupa file `.so`) dijalankan pada arsitektur CPU tertentu.  
-
+Application Binary Interface (ABI) adalah perantara antara aplikasi dan sistem operasi yang menentukan bagaimana kode biner (native code) dijalankan pada arsitektur CPU tertentu.
+Secara sederhana, ABI menjembatani hasil kompilasi program dengan perangkat keras yang mengeksekusinya. Ia memastikan bahwa kode mesin yang dihasilkan oleh compiler dapat berinteraksi dengan sistem operasi dan CPU dengan benar.
 ABI mengatur:
-- Format dan struktur file biner.
-- Konvensi pemanggilan fungsi (calling convention).
-- Ukuran dan alignment tipe data.
-- Cara program menggunakan register dan memori.
-- Kompatibilitas antara kode yang dikompilasi dan sistem target.
+- Format dan struktur file biner yang digunakan sistem.
+- Konvensi pemanggilan fungsi (calling convention), yaitu bagaimana argumen dan nilai balik fungsi dikelola di register atau memori.
+- Ukuran dan alignment dari setiap tipe data (misalnya int, float, double).
+- Cara program menggunakan register dan memori dalam eksekusi.
+- Kompatibilitas antara kode hasil kompilasi dan sistem target.
 
-Setiap jenis CPU memiliki instruksi dan karakteristik yang berbeda. Oleh karena itu, setiap file APK yang berisi kode native harus menyediakan versi library `.so` yang sesuai dengan arsitektur perangkat.  
-Jika ABI tidak cocok dengan perangkat, aplikasi tidak dapat dijalankan.
+**Tentang file .so (Shared Object)**.
+File dengan ekstensi .so (shared object) adalah library biner yang berisi kode native yang dapat digunakan ulang oleh aplikasi Android.
+Library ini biasanya dihasilkan dari bahasa pemrograman seperti C atau C++ melalui NDK (Native Development Kit), lalu disertakan di dalam aplikasi agar dapat dijalankan langsung oleh sistem operasi.
+Setiap ABI memiliki versi .so yang berbeda, misalnya:
+```
+lib/arm64-v8a/libflutter.so
+lib/armeabi-v7a/libflutter.so
+```
+Meskipun keduanya memiliki nama file sama (libflutter.so), isi biner di dalamnya berbeda karena dikompilasi untuk arsitektur CPU yang berbeda (ARM 32-bit dan ARM 64-bit).
+Jika aplikasi dijalankan pada perangkat dengan ABI yang tidak sesuai dengan file .so yang tersedia, maka aplikasi akan gagal diluncurkan dan menampilkan error:
+```
+INSTALL_FAILED_NO_MATCHING_ABIS
+```
+Dengan kata lain, ABI adalah “bahasa mesin” yang menyatukan tiga komponen utama seperti Kode program (hasil kompilasi dari Flutter, C++, dll), Sistem operasi Android, dan Arsitektur perangkat keras (CPU).
+**Tanpa ABI yang sesuai, kode tidak bisa dieksekusi dengan benar di perangkat target.**
 
 ---
 
@@ -361,7 +373,25 @@ Ringkasan:
 - Gunakan App Bundle (AAB) untuk distribusi resmi di Play Store.
 - Gunakan Target ABI bila aplikasi hanya dijalankan di lingkungan tertentu.
 
-## 13. Referensi
+## 13. Glosarium / Istilah
+Berikut beberapa istilah penting yang sering digunakan dalam pembahasan ABI (Application Binary Interface) pada Flutter dan Android:
+| Istilah                                | Penjelasan                                                                                                                                                                                        |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ABI (Application Binary Interface)** | Antarmuka biner antara aplikasi dan sistem operasi yang menentukan bagaimana kode biner dieksekusi pada arsitektur CPU tertentu.                                                                  |
+| **NDK (Native Development Kit)**       | Sekumpulan alat dan library resmi dari Android yang digunakan untuk menulis dan mengompilasi kode native (C/C++) agar dapat dijalankan di Android.                                                |
+| **`.so` (Shared Object)**              | File library hasil kompilasi kode native yang dapat digunakan bersama oleh aplikasi. Berisi fungsi dan logika yang dijalankan langsung oleh CPU. Lokasinya biasanya di dalam folder `lib/<ABI>/`. |
+| **AAB (Android App Bundle)**           | Format distribusi resmi aplikasi Android di Google Play. Google Play akan membagi AAB menjadi beberapa APK sesuai perangkat pengguna.                                                             |
+| **APK (Android Package)**              | Format paket aplikasi Android yang berisi kode, resource, dan library siap dijalankan pada perangkat.                                                                                             |
+| **AGP (Android Gradle Plugin)** | Plugin utama yang digunakan oleh Gradle untuk membangun aplikasi Android. AGP mengatur proses kompilasi, pengemasan, dan optimasi aplikasi, termasuk konfigurasi build per ABI, proguard, serta resource shrinking. Flutter secara internal memanggil AGP melalui Gradle saat menjalankan perintah `flutter build`. |
+| **ARM / ARM64**                        | Arsitektur CPU yang umum digunakan di sebagian besar perangkat Android modern. ARM64 (arm64-v8a) adalah versi 64-bit yang lebih cepat dan efisien dibanding ARM 32-bit (armeabi-v7a).             |
+| **x86 / x86_64**                       | Arsitektur CPU berbasis Intel, umumnya digunakan pada emulator Android, bukan perangkat fisik.                                                                                                    |
+| **Gradle**                             | Sistem build yang digunakan oleh Android Studio dan Flutter untuk mengelola dependensi, kompilasi, dan konfigurasi build aplikasi.                                                                |
+| **`flutter build`**                    | Perintah CLI Flutter untuk membangun aplikasi dalam format APK, AAB, atau iOS build.                                                                                                              |
+| **ADB (Android Debug Bridge)**         | Alat baris perintah untuk berkomunikasi dengan perangkat Android. Dapat digunakan untuk instalasi, debugging, atau memeriksa properti sistem seperti ABI.                                         |
+| **ProGuard / R8**                      | Alat optimasi yang digunakan untuk mengecilkan ukuran APK dengan cara menghapus kode yang tidak digunakan dan mengompresi bytecode.                                                               |
+
+
+## 14. Referensi
 - Flutter Documentation =? https://docs.flutter.dev/deployment/android
 - Android Developers => https://developer.android.com/ndk/guides/abis
 - Android Studio Build Configuration => https://developer.android.com/studio/build/configure-apk-splits
