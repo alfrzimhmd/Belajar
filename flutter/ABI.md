@@ -16,7 +16,7 @@ Materi ini mencakup pengertian ABI, jenis-jenis ABI yang digunakan Android, hubu
 - [Optimasi Ukuran APK Berdasarkan ABI](#10-optimasi-ukuran-apk-berdasarkan-abi)
 - [Diagram Proses Build Flutter dan ABI](#11-diagram-proses-build-flutter-dan-abi)
 - [Skrip Otomatis Build dan Instalasi](#12-skrip-otomatis-build-dan-instalasi)
-- [Glosarium / Istilah](#13-glosarium-istilah)
+- [Glosarium](#13-glosarium)
 - [Referensi](#14-referensi)
 ---
 ## 1. Pengertian ABI
@@ -373,8 +373,8 @@ Ringkasan:
 - Gunakan App Bundle (AAB) untuk distribusi resmi di Play Store.
 - Gunakan Target ABI bila aplikasi hanya dijalankan di lingkungan tertentu.
 
-## 13. Glosarium / Istilah
-Berikut beberapa istilah penting yang sering digunakan dalam pembahasan ABI (Application Binary Interface) pada Flutter dan Android:
+## 13. Glosarium 
+Beberapa istilah penting yang sering digunakan dalam pembahasan ABI (Application Binary Interface) pada Flutter dan Android:
 | Istilah                                | Penjelasan                                                                                                                                                                                        |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **ABI (Application Binary Interface)** | Antarmuka biner antara aplikasi dan sistem operasi yang menentukan bagaimana kode biner dieksekusi pada arsitektur CPU tertentu.                                                                  |
