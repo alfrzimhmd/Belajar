@@ -392,7 +392,7 @@ Beberapa istilah penting yang sering digunakan dalam pembahasan ABI (Application
 
 
 ## 14. Referensi
-- Flutter Documentation =? https://docs.flutter.dev/deployment/android
+- Flutter Documentation => https://docs.flutter.dev/deployment/android
 - Android Developers => https://developer.android.com/ndk/guides/abis
 - Android Studio Build Configuration => https://developer.android.com/studio/build/configure-apk-splits
 - Flutter CLI Reference => https://docs.flutter.dev/reference/flutter-cli
