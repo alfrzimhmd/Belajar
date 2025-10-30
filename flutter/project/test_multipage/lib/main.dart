@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget{
       // Rute awal yang akan ditampilkan saat aplikasi pertama kali dibuka
       initialRoute: '/splash',
 
-      // Daftar rute yang tersedia dalam aplikasi
+      // Daftar rute
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/login' : (context) => const LoginPage(),
