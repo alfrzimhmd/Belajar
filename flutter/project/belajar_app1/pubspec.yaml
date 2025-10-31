@@ -1,0 +1,28 @@
+name: belajar_app1
+description: "Belajar dasar - dasar flutter tentang penggunaan splashscreen, auth (login & register), dan penggunaan main_page untuk navigasi ke beberapa halaman"
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  english_words: ^4.0.0
+  provider: ^6.1.2
+  shared_preferences: ^2.2.2
+  awesome_notifications: ^0.10.1
+  intl: ^0.20.0
+  flutter_launcher_icons: ^0.14.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
