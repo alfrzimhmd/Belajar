@@ -87,10 +87,6 @@ UMKM_Digital_Helper/
 │   │   └── statistik/                # Modul statistik dan laporan
 │   │       ├── statistik_page.dart   # Halaman utama statistik
 │   │       └── statistik_data.dart   # Logika & data statistik
-│   │
-│   └── widgets/                      # (Opsional) Folder untuk widget umum
-│       └── custom_header.dart        # Misal: Header yang kamu buat di atas
-│
 ├── assets/
 │   ├── logo_umkm.png                 # Logo UMKM (untuk header)
 │   ├── logo_apk.png                  # Logo utama aplikasi
