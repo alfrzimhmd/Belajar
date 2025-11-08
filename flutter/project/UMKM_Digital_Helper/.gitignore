@@ -1,4 +1,4 @@
-# Miscellaneous
+# MISCELLANEOUS - FILE UMUM
 *.class
 *.log
 *.pyc
@@ -12,34 +12,74 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ related
+# IDE RELATED - FILE EDITOR/IDE
+# IntelliJ/Android Studio
 *.iml
 *.ipr
 *.iws
 .idea/
+.gradle/
+local.properties
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# Flutter/Dart/Pub related
+# FLUTTER/DART/PUB RELATED - CORE FLUTTER
 **/doc/api/
-**/ios/Flutter/.last_build_id
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
+.packages
 .pub-cache/
 .pub/
+/pubspec.lock
 /build/
 /coverage/
 
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
+# ANDROID RELATED - ANDROID BUILD
 # Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+
+# Android build files
+/android/app/.gradle/
+/android/app/build/
+/android/app/gradle/
+/android/app/.android/
+/android/captures/
+
+# Gradle
+/android/.gradle/
+/android/gradle/wrapper/gradle-wrapper.jar
+/android/gradle.properties
+
+# ENVIRONMENT VARIABLES - FILE SENSITIVE
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# API keys and sensitive data
+*_key.pem
+*_cert.pem
+config.json
+secrets.json
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Mac
+*.DS_Store
+.AppleDouble
+.LSOverride

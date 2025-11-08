@@ -31,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 5),
 
             // Judul dan subjudul
             const Text(

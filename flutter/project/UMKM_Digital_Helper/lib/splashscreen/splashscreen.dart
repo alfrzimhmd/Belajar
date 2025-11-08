@@ -20,29 +20,52 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white, 
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center, // Posisi tengah vertikal
           children: [
+            // Menampilkan logo aplikasi
             Image.asset(
               'assets/logo_umkm.png',
               width: 150,
               height: 150,
-              fit: BoxFit.contain,
+              fit: BoxFit.contain, // Memastikan gambar proporsional
             ),
-            const SizedBox(height: 5),
-            // Text loading
-            const Text(
-              'Loading...',
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            const SizedBox(height: 20), // Spasi antara logo dan loading
+            _buildLoadingPlaceholder(), // Widget loading indicator custom
           ],
         ),
+      ),
+    );
+  }
+
+  // Method untuk membangun loading indicator
+  Widget _buildLoadingPlaceholder() {
+    return Container(
+      color: Colors.transparent, // Background transparan mengikuti scaffold
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Circular progress indicator dengan ukuran kecil
+          SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 4, // Ketebalan garis
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade700), 
+            ),
+          ),
+          const SizedBox(height: 8), 
+          Text(
+            'Loading...',
+            style: TextStyle(
+              fontSize: 12, 
+              color: Colors.grey.shade600, 
+              fontWeight: FontWeight.w300, 
+            ),
+          ),
+        ],
       ),
     );
   }
