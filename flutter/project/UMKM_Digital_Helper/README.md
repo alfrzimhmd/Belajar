@@ -57,6 +57,7 @@ UMKM Digital Helper adalah solusi all-in-one untuk pemilik coffee shop dalam men
 - Responsive UI - Adaptive layout
 
 ## Struktur Project
+```
 UMKM_Digital_Helper/
 ├── lib/
 │   ├── main.dart                     # Entry point aplikasi
@@ -86,10 +87,6 @@ UMKM_Digital_Helper/
 │   │   └── statistik/                # Modul statistik dan laporan
 │   │       ├── statistik_page.dart   # Halaman utama statistik
 │   │       └── statistik_data.dart   # Logika & data statistik
-│   │
-│   └── widgets/                      # (Opsional) Folder untuk widget umum
-│       └── custom_header.dart        # Misal: Header yang kamu buat di atas
-│
 ├── assets/
 │   ├── logo_umkm.png                 # Logo UMKM (untuk header)
 │   ├── logo_apk.png                  # Logo utama aplikasi
@@ -99,3 +96,4 @@ UMKM_Digital_Helper/
 │       └── matcha_latte.jpg
 │
 └── pubspec.yaml                      # Dependencies dan konfigurasi Flutter
+
