@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'list_produk.dart'; // Import data produk
+import 'list_produk.dart'; // import data produk dari list_produk
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -10,67 +10,46 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  String _selectedCategory = 'Semua'; // Kategori yang aktif
-  final TextEditingController _searchController = TextEditingController(); // Controller untuk search field
+  String _selectedCategory = 'Semua'; 
+  final TextEditingController _searchController = TextEditingController(); 
+  final List<String> _categories = ['Semua', 'Kopi', 'Minuman', 'Makanan'];
 
-  // Daftar kategori produk
-  final List<String> _categories = [
-    'Semua',
-    'Kopi',
-    'Non-Kopi',
-    'Snack',
-    'Minuman',
-  ];
-
-  // Getter untuk produk yang sudah difilter berdasarkan kategori dan pencarian
   List<Map<String, dynamic>> get _filteredProducts {
-    var filtered = productList; // Data dari list_produk.dart
+    var filtered = productList; 
     
-    // Filter by category 
+    // Filter by kategori jika bukan 'Semua'
     if (_selectedCategory != 'Semua') {
       filtered = filtered.where((product) => product['category'] == _selectedCategory).toList();
     }
     
-    // Filter by search text 
+    // Filter by teks pencarian jika tidak kosong
     if (_searchController.text.isNotEmpty) {
       filtered = filtered.where((product) => 
           product['name'].toLowerCase().contains(_searchController.text.toLowerCase())).toList();
     }
     
-    return filtered;
+    return filtered; 
   }
 
-  // Method untuk menerapkan filter dan rebuild UI
-  void _applyFilter() {
-    setState(() {}); // Trigger rebuild dengan state baru
-  }
-
+  /// BUILD METHOD 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFD),
+      backgroundColor: const Color(0xFFF8FAFD), 
       body: SafeArea(
         child: Column(
           children: [
-            // Header dengan gradient
             _buildHeader(),
-            const SizedBox(height: 16),
-
-            // Search Section
+            const SizedBox(height: 16), 
             _buildSearchBar(),
-            const SizedBox(height: 10),
-
-            // Categories filter chips
+            const SizedBox(height: 10), 
             _buildCategoryFilter(),
             const SizedBox(height: 10),
-
-            // Products count header
             _buildProductsHeader(),
             const SizedBox(height: 12),
-
-            // Products List menggunakan widget terpisah
+            
             Expanded(
-              child: ProductList(products: _filteredProducts),
+              child: ProductList(products: _filteredProducts), 
             ),
           ],
         ),
@@ -78,27 +57,25 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  // Widget untuk header page
+  // Widget untuk membuat header
   Widget _buildHeader() {
     return Container(
-      height: 80,
+      height: 80, 
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.blue.shade800, Colors.blue.shade600], 
         ),
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blue.shade800.withAlpha(76),
-            blurRadius: 10,
-            offset: const Offset(0, 4), 
-          ),
-        ],
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)), 
+        boxShadow: [BoxShadow(
+          color: Colors.blue.shade800.withAlpha(76), 
+          blurRadius: 10, 
+          offset: const Offset(0, 4), 
+        )],
       ),
       child: Stack(
         children: [
-          Positioned(right: -10, top: -10, child: _buildCircle(70, 51)),
-          Positioned(right: 25, bottom: -15, child: _buildCircle(50, 38)),
+          Positioned(right: -10, top: -10, child: _buildCircle(70)),
+          Positioned(right: 25, bottom: -15, child: _buildCircle(50)),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 25, 16, 16),
             child: Row(
@@ -108,19 +85,17 @@ class _ProductsPageState extends State<ProductsPage> {
                   margin: const EdgeInsets.only(right: 12),
                   decoration: BoxDecoration(
                     color: Colors.white.withAlpha(64), 
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12), 
                     border: Border.all(color: Colors.white.withAlpha(128), width: 1.5),
                   ),
                   child: const Icon(LucideIcons.coffee, color: Colors.white, size: 22), 
-                ),
-                
-                // Text content
+                ),                
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Manajemen Produk", style: _titleStyle), 
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 6), 
                       Text("Kelola menu dan stok produk", style: _subtitleStyle), 
                     ],
                   ),
@@ -133,17 +108,16 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  // Helper method untuk membuat circle background
-  Widget _buildCircle(double size, int alpha) => Container(
+  // Method untuk Membuat circle decoration untuk header
+  Widget _buildCircle(double size) => Container(
     width: size, height: size,
     decoration: BoxDecoration(
-      color: Colors.white.withAlpha(alpha), // White dengan opacity
-      shape: BoxShape.circle,
+      color: Colors.white.withAlpha(size == 70 ? 51 : 38), 
+      shape: BoxShape.circle, 
     ),
   );
 
-  // Text styles untuk header
-  final _titleStyle = TextStyle(
+  final _titleStyle = const TextStyle(
     color: Colors.white,
     fontSize: 18,
     fontWeight: FontWeight.bold,
@@ -151,74 +125,131 @@ class _ProductsPageState extends State<ProductsPage> {
   );
 
   final _subtitleStyle = TextStyle(
-    color: Colors.white.withAlpha(200), // White dengan opacity
+    color: Colors.white.withAlpha(200),
     fontSize: 13,
     fontWeight: FontWeight.w500,
-    height: 1.2,
+    height: 1.2, 
   );
 
-  // Widget untuk search bar
+  /// Widget search bar
   Widget _buildSearchBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: TextField(
-        controller: _searchController,
-        onChanged: (_) => _applyFilter(), // Apply filter real-time saat typing
-        decoration: InputDecoration(
-          hintText: "Cari Produk...",
-          prefixIcon: const Icon(Icons.search), // Search icon
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(19), // Rounded border
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(19),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(13), 
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: TextField(
+          controller: _searchController,
+          onChanged: (_) => setState(() {}),
+          decoration: InputDecoration(
+            hintText: "Cari Produk...", 
+            prefixIcon: const Icon(Icons.search, color: Colors.blueGrey), 
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(19),
+              borderSide: BorderSide.none,
+            ), 
+            filled: true,
+            fillColor: Colors.white, 
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+            hintStyle: TextStyle(color: Colors.grey.shade500),
           ),
-          filled: true,
-          fillColor: Colors.transparent,
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         ),
       ),
     );
   }
 
-  // Widget untuk category filter chips
+  // Widget untuk filter kategori 
   Widget _buildCategoryFilter() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Wrap(
-        spacing: 8.0, // Spasi horizontal antar chips
-        runSpacing: 8.0, // Spasi vertical antar baris
-        children: _categories.map((cat) {
-          final isSelected = _selectedCategory == cat;
-          return ChoiceChip(
-            label: Text(
-              cat,
-              style: TextStyle(
-                fontSize: 12,
-                color: isSelected ? Colors.white : Colors.black87, // White ketika selected
-                fontWeight: FontWeight.w500,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: _categories.map((category) {
+            final isSelected = _selectedCategory == category;
+            final bool isFirst = category == _categories.first;
+            final bool isLast = category == _categories.last;
+            
+            return Container(
+              margin: EdgeInsets.only(
+                right: isLast ? 0 : 8,
+                left: isFirst ? 0 : 0,
               ),
-            ),
-            selected: isSelected,
-            onSelected: (_) {
-              setState(() => _selectedCategory = cat); // Update kategori selected
-              _applyFilter();
-            },
-            selectedColor: Colors.blue.shade700, // Blue background ketika selected
-            backgroundColor: Colors.white, // White background default
-            side: BorderSide(
-              color: Colors.grey.shade300, // Border color
-              width: 1,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15), // Rounded chips
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-          );
-        }).toList(),
+              child: GestureDetector(
+                onTap: () => setState(() => _selectedCategory = category),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    gradient: isSelected 
+                        ? LinearGradient(
+                            colors: [Colors.blue.shade700, Colors.blue.shade600],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          )
+                        : null,
+                    color: isSelected ? null : Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      if (isSelected)
+                        BoxShadow(
+                          color: Colors.blue.shade300.withAlpha(102), 
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        )
+                      else
+                        BoxShadow(
+                          color: Colors.grey.shade300.withAlpha(204), 
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                    ],
+                    border: isSelected
+                        ? null
+                        : Border.all(color: Colors.grey.shade200, width: 1.5),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (isSelected)
+                        Container(
+                          margin: const EdgeInsets.only(right: 6),
+                          child: Icon(
+                            Icons.check_circle_rounded,
+                            size: 16,
+                            color: Colors.white.withAlpha(229), 
+                          ),
+                        ),
+                      Text(
+                        category,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: isSelected ? Colors.white : Colors.blueGrey.shade800,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
 
-  // Widget untuk header jumlah produk
+  // Widget untuk header produk
   Widget _buildProductsHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -231,6 +262,33 @@ class _ProductsPageState extends State<ProductsPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: Colors.black87,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.blue.shade100, width: 1),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.filter_alt_rounded,
+                  size: 16,
+                  color: Colors.blue.shade700,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  _selectedCategory,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.blue.shade800,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

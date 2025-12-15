@@ -1,37 +1,20 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-// =============================================================================
-// DATA PRODUK COFFEE SHOP
-// =============================================================================
-
-/// List data produk yang mendukung 2 jenis gambar:
+/// List data produk coffee shop yang mendukung 2 jenis gambar:
 /// 1. Gambar LOKAL (assets) - menggunakan 'imageType': 'asset'
 /// 2. Gambar INTERNET (network) - menggunakan 'imageType': 'network' atau tanpa imageType
-
-/// Menggunakan cached_network_image untuk mengakses gambar gratis dari beberapa platform seperti:
-/// Unsplash - https://images.unsplash.com/...
-/// Pexels - https://images.pexels.com/...
-/// Pixabay - https://cdn.pixabay.com/...
-
-/// FITUR: Auto switch antara gambar internet dan placeholder saat offline
-/// - Saat ONLINE: Gambar dari internet akan dimuat
-/// - Saat OFFLINE: Langsung tampilkan placeholder (tidak loading muter)
-/// - Real-time: Otomatis update ketika koneksi berubah
-
 final List<Map<String, dynamic>> productList = [
-
-  // ============================== PRODUK KOPI ==============================
-  // PRODUK DENGAN GAMBAR LOKAL (ASSETS)
   {
     'id': '1',
     'name': 'Kopi Susu Gula Aren',
     'category': 'Kopi',
     'price': 15000,
     'stock': 45,
-    'image': 'assets/produk/kopi_susu_gula_aren.jpg', // Path ke file lokal di assets
-    'imageType': 'asset', // TANDAI SEBAGAI GAMBAR LOKAL
+    'image': 'assets/produk/kopi_susu_gula_aren.jpg',
+    'imageType': 'asset', // Menandakan gambar dari assets atau lokal
   },
   {
     'id': '2',
@@ -39,566 +22,409 @@ final List<Map<String, dynamic>> productList = [
     'category': 'Kopi',
     'price': 12000,
     'stock': 32,
-    'image': 'assets/produk/kopi_americano.jpg', // Path ke file lokal di assets
-    'imageType': 'asset', // TANDAI SEBAGAI GAMBAR LOKAL
+    'image': 'assets/produk/kopi_americano.jpg',
+    'imageType': 'asset', 
   },
-
-  // PRODUK DENGAN GAMBAR INTERNET (NETWORK) - TANPA imageType
   {
     'id': '3',
+    'name': 'Matcha Latte',
+    'category': 'Minuman',
+    'price': 12000,
+    'stock': 32,
+    'image': 'assets/produk/matcha_latte.jpg',
+    'imageType': 'asset', 
+  },
+  {
+    'id': '4',
     'name': 'Latte Art',
     'category': 'Kopi',
     'price': 18000,
     'stock': 28,
     'image': 'https://images.unsplash.com/photo-1561047029-3000c68339ca?w=400&h=300&fit=crop',
-    // Tidak ada imageType -> default ke 'network'
+    // Tidak ada imageType, default ke network atau dari internet
   },
   {
-    'id': '4',
+    'id': '5',
     'name': 'Cappuccino',
     'category': 'Kopi',
     'price': 16000,
     'stock': 36,
     'image': 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop',
-    // Tidak ada imageType -> default ke 'network'
-  },
-
-  // PRODUK DENGAN GAMBAR INTERNET (NETWORK) - DENGAN imageType eksplisit
-  {
-    'id': '5',
-    'name': 'Espresso',
-    'category': 'Kopi',
-    'price': 10000,
-    'stock': 50,
-    'image': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop',
-    'imageType': 'network', // TANDAI SEBAGAI GAMBAR INTERNET (opsional)
   },
   {
     'id': '6',
-    'name': 'Vietnam Drip',
-    'category': 'Kopi',
-    'price': 22000,
-    'stock': 20,
-    'image': 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?w=400&h=300&fit=crop',
-    'imageType': 'network', // TANDAI SEBAGAI GAMBAR INTERNET (opsional)
+    'name': 'Strawberry Smoothie',
+    'category': 'Minuman',
+    'price': 23000,
+    'stock': 15,
+    'image': 'https://images.pexels.com/photos/103566/pexels-photo-103566.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
   {
     'id': '7',
-    'name': 'Mocha',
-    'category': 'Kopi',
+    'name': 'Roti',
+    'category': 'Makanan',
     'price': 19000,
-    'stock': 25,
-    'image': 'https://images.unsplash.com/photo-1561047029-3000c68339ca?w=400&h=300&fit=crop',
-    'imageType': 'network', 
+    'stock': 10,
+    'image': 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&h=300&fit=crop',
   },
   {
     'id': '8',
-    'name': 'Macchiato',
-    'category': 'Kopi',
-    'price': 17000,
-    'stock': 30,
-    'image': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
-    'imageType': 'network', 
+    'name': 'Club Sandwich',
+    'category': 'Makanan',
+    'price': 32000,
+    'stock': 14,
+    'image': 'https://images.pexels.com/photos/1600711/pexels-photo-1600711.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
   {
     'id': '9',
-    'name': 'Flat White',
-    'category': 'Kopi',
-    'price': 20000,
+    'name': 'Mi Goreng',
+    'category': 'Makanan',
+    'price': 12000,
     'stock': 22,
-    'image': 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop',
-    'imageType': 'network', 
+    'image': 'https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
   {
     'id': '10',
-    'name': 'Turkish Coffee',
-    'category': 'Kopi',
-    'price': 25000,
-    'stock': 15,
-    'image': 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?w=400&h=300&fit=crop',
-    'imageType': 'network', 
+    'name': 'Es Buah',
+    'category': 'Minuman',
+    'price': 15000,
+    'stock': 16,
+    'image': 'https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
-
-  // PRODUK DENGAN GAMBAR LOKAL (ASSETS)
   {
     'id': '11',
-    'name': 'Matcha Latte',
-    'category': 'Non-Kopi',
-    'price': 20000,
-    'stock': 24,
-    'image': 'assets/produk/matcha_latte.jpg', // Path ke file lokal di assets
-    'imageType': 'asset', // TANDAI SEBAGAI GAMBAR LOKAL
+    'name': 'Brownies Pack',
+    'category': 'Makanan',
+    'price': 25000,
+    'stock': 13,
+    'image': 'https://images.pexels.com/photos/45202/brownie-dessert-cake-sweet-45202.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
-
-  // ============================ PRODUK NON-KOPI ============================
-  // PRODUK DENGAN GAMBAR INTERNET (NETWORK)
   {
     'id': '12',
-    'name': 'Chocolate Ice',
-    'category': 'Non-Kopi',
-    'price': 17000,
-    'stock': 18,
-    'image': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400&h=300&fit=crop',
+    'name': 'Bakso',
+    'category': 'Makanan',
+    'price': 15000,
+    'stock': 45,
+    'image': 'assets/produk/bakso.jpeg',
+    'imageType': 'asset', 
   },
   {
     'id': '13',
-    'name': 'Thai Tea',
-    'category': 'Non-Kopi',
-    'price': 15000,
-    'stock': 30,
-    'image': 'https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=400&h=300&fit=crop',
+    'name': 'Es Teh',
+    'category': 'Minuman',
+    'price': 6000,
+    'stock': 45,
+    'image': 'assets/produk/es_teh.jpg',
+    'imageType': 'asset', 
   },
   {
     'id': '14',
-    'name': 'Lemon Tea',
-    'category': 'Non-Kopi',
-    'price': 12000,
-    'stock': 40,
-    'image': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
+    'name': 'Sate',
+    'category': 'Makanan',
+    'price': 29000,
+    'stock': 45,
+    'image': 'assets/produk/sate.jpg',
+    'imageType': 'asset', 
   },
   {
     'id': '15',
-    'name': 'Red Velvet Latte',
-    'category': 'Non-Kopi',
-    'price': 19000,
-    'stock': 22,
-    'image': 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=400&h=300&fit=crop',
+    'name': 'nugget',
+    'category': 'Makanan',
+    'price': 20000,
+    'stock': 100,
+    'image': 'assets/produk/nugget.jpg',
+    'imageType': 'asset',
   },
   {
     'id': '16',
-    'name': 'Taro Latte',
-    'category': 'Non-Kopi',
-    'price': 18000,
-    'stock': 20,
-    'image': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400&h=300&fit=crop',
+    'name': 'Club Coffee',
+    'category': 'Kopi',
+    'price': 22000,
+    'stock': 25,
+    'image': 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w-400&h=300&fit=crop',
   },
   {
     'id': '17',
-    'name': 'Hazelnut Coffee',
-    'category': 'Non-Kopi',
-    'price': 16000,
-    'stock': 28,
-    'image': 'https://images.unsplash.com/photo-1561047029-3000c68339ca?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '18',
-    'name': 'Vanilla Latte',
-    'category': 'Non-Kopi',
-    'price': 17000,
-    'stock': 26,
-    'image': 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop',
-  },
-
-  // ============================= PRODUK SNACK ==============================
-  // PRODUK DENGAN GAMBAR INTERNET (NETWORK)
-  {
-    'id': '19',
-    'name': 'Croissant',
-    'category': 'Snack',
-    'price': 12000,
-    'stock': 52,
-    'image': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '20',
-    'name': 'Sandwich',
-    'category': 'Snack',
-    'price': 22000,
-    'stock': 15,
-    'image': 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '21',
-    'name': 'Muffin Coklat',
-    'category': 'Snack',
-    'price': 10000,
-    'stock': 25,
-    'image': 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '22',
-    'name': 'Cookies',
-    'category': 'Snack',
-    'price': 8000,
-    'stock': 60,
-    'image': 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '23',
-    'name': 'Brownies',
-    'category': 'Snack',
-    'price': 15000,
-    'stock': 35,
-    'image': 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '24',
-    'name': 'Donat',
-    'category': 'Snack',
-    'price': 7000,
-    'stock': 40,
-    'image': 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '25',
-    'name': 'Pancake',
-    'category': 'Snack',
+    'name': 'Kopi Ireng',
+    'category': 'Kopi',
     'price': 18000,
-    'stock': 20,
-    'image': 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '26',
-    'name': 'Waffle',
-    'category': 'Snack',
-    'price': 16000,
-    'stock': 18,
-    'image': 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=400&h=300&fit=crop',
-  },
-
-  // ============================ PRODUK MINUMAN =============================
-  
-  // PRODUK DENGAN GAMBAR INTERNET (NETWORK)
-  {
-    'id': '28',
-    'name': 'Jus Jeruk',
-    'category': 'Minuman',
-    'price': 15000,
-    'stock': 35,
-    'image': 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '29',
-    'name': 'Soda Gembira',
-    'category': 'Minuman',
-    'price': 13000,
-    'stock': 20,
-    'image': 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '30',
-    'name': 'Es Teh Manis',
-    'category': 'Minuman',
-    'price': 8000,
-    'stock': 75,
-    'image': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop',
-  },
-
-  // ============================== PRODUK TAMBAHAN ==============================
-  // PRODUK DENGAN GAMBAR INTERNET (NETWORK)
-  {
-    'id': '31',
-    'name': 'Kopi Tubruk',
-    'category': 'Kopi',
-    'price': 8000,
-    'stock': 60,
-    'image': 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '32',
-    'name': 'V60 Pour Over',
-    'category': 'Kopi',
-    'price': 25000,
-    'stock': 18,
+    'stock': 30,
     'image': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&h=300&fit=crop',
   },
   {
-    'id': '33',
-    'name': 'Cold Brew',
-    'category': 'Kopi',
-    'price': 18000,
-    'stock': 25,
-    'image': 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '34',
-    'name': 'Affogato',
-    'category': 'Kopi',
-    'price': 22000,
+    'id': '18',
+    'name': 'Chocolate Frappe',
+    'category': 'Minuman',
+    'price': 25000,
     'stock': 20,
-    'image': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
+    'image': 'https://images.pexels.com/photos/3727250/pexels-photo-3727250.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
   {
-    'id': '35',
-    'name': 'Milkshake Coklat',
-    'category': 'Non-Kopi',
-    'price': 16000,
-    'stock': 30,
-    'image': 'https://images.unsplash.com/photo-1577803645773-f96470509666?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '37',
-    'name': 'Hot Chocolate',
-    'category': 'Non-Kopi',
-    'price': 15000,
-    'stock': 35,
-    'image': 'https://images.unsplash.com/photo-1542995470-870e12e7e14f?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '38',
-    'name': 'Es Kelapa Muda',
-    'category': 'Non-Kopi',
+    'id': '19',
+    'name': 'Chocolate Chip Cookies',
+    'category': 'Makanan',
     'price': 12000,
-    'stock': 40,
-    'image': 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '39',
-    'name': 'Bagel',
-    'category': 'Snack',
-    'price': 14000,
-    'stock': 28,
-    'image': 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '40',
-    'name': 'Cinnamon Roll',
-    'category': 'Snack',
-    'price': 13000,
-    'stock': 32,
-    'image': 'https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '41',
-    'name': 'Banana Bread',
-    'category': 'Snack',
-    'price': 11000,
-    'stock': 26,
-    'image': 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '42',
-    'name': 'Cheese Cake',
-    'category': 'Snack',
-    'price': 20000,
-    'stock': 18,
-    'image': 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&h=300&fit=crop',
-  },
-  {
-    'id': '43',
-    'name': 'Es Cincau',
-    'category': 'Minuman',
-    'price': 10000,
     'stock': 45,
-    'image': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=300&fit=crop',
+    'image': 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop',
   },
   {
-    'id': '44',
-    'name': 'Jus Alpukat',
-    'category': 'Minuman',
-    'price': 16000,
+    'id': '20',
+    'name': 'Cheesecake',
+    'category': 'Makanan',
+    'price': 35000,
+    'stock': 12,
+    'image': 'https://images.pexels.com/photos/132694/pexels-photo-132694.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+  },
+  {
+    'id': '21',
+    'name': 'Donut',
+    'category': 'Makanan',
+    'price': 10000,
+    'stock': 60,
+    'image': 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=300&fit=crop',
+  },
+  {
+    'id': '22',
+    'name': 'Pancake',
+    'category': 'Makanan',
+    'price': 28000,
+    'stock': 18,
+    'image': 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop',
+  },
+  {
+    'id': '23',
+    'name': 'French Fries',
+    'category': 'Makanan',
+    'price': 20000,
     'stock': 30,
-    'image': 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&h=300&fit=crop',
+    'image': 'https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
   {
-    'id': '45',
-    'name': 'Es Campur',
-    'category': 'Minuman',
-    'price': 15000,
-    'stock': 25,
-    'image': 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400&h=300&fit=crop',
+    'id': '24',
+    'name': 'Grilled Cheese Sandwich',
+    'category': 'Makanan',
+    'price': 32000,
+    'stock': 20,
+    'image': 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=300&fit=crop',
   },
   {
-    'id': '46',
-    'name': 'Milkshake Vanilla',
-    'category': 'Minuman',
-    'price': 17000,
-    'stock': 28,
-    'image': 'https://images.unsplash.com/photo-1577803645773-f96470509666?w=400&h=300&fit=crop',
+    'id': '25',
+    'name': 'Caesar Salad',
+    'category': 'Makanan',
+    'price': 35000,
+    'stock': 15,
+    'image': 'https://images.pexels.com/photos/2097090/pexels-photo-2097090.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
   },
+  {
+    'id': '26',
+    'name': 'Tuna Sandwich',
+    'category': 'Makanan',
+    'price': 30000,
+    'stock': 22,
+    'image': 'https://images.unsplash.com/photo-1481070414801-51fd732d7184?w=400&h=300&fit=crop',
+  },
+  {
+    'id': '27',
+    'name': 'Beef Burger',
+    'category': 'Makanan',
+    'price': 45000,
+    'stock': 18,
+    'image': 'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+  },
+  {
+    'id': '28',
+    'name': 'Pizza',
+    'category': 'Makanan',
+    'price': 32000,
+    'stock': 20,
+    'image': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop',
+  },
+  {
+    'id': '29',
+    'name': 'Spaghetti Carbonara',
+    'category': 'Makanan',
+    'price': 42000,
+    'stock': 15,
+    'image': 'https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+  },
+
+  {
+    'id': '30',
+    'name': 'v60 Coffee',
+    'category': 'Kopi',
+    'price': 20000,
+    'stock': 100,
+    'image': 'assets/produk/v60.jpg',
+    'imageType': 'asset',
+  },
+
+  
 ];
 
-// WIDGET PRODUCT LIST - SUPPORT KEDUA JENIS GAMBAR + AUTO SWITCH OFFLINE/ONLINE
+
+/// Widget untuk menampilkan daftar produk dalam bentuk grid
 class ProductList extends StatefulWidget {
   final List<Map<String, dynamic>> products;
 
-  const ProductList({
-    super.key,
-    required this.products,
-  });
+  const ProductList({super.key, required this.products});
 
   @override
   State<ProductList> createState() => _ProductListState();
 }
 
 class _ProductListState extends State<ProductList> {
-  bool _isConnected = true; // Status koneksi internet, default true
+  bool _isConnected = true;
+  bool _isCheckingConnection = false;
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   @override
   void initState() {
     super.initState();
-    _checkInitialConnectivity(); // Cek koneksi saat pertama kali load
-    _setupConnectivityListener(); // Setup listener untuk perubahan koneksi
+    _initializeConnectivity();
   }
 
-  /// Method untuk mengecek status koneksi internet saat pertama kali widget di load
-  Future<void> _checkInitialConnectivity() async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    setState(() {
-      _isConnected = connectivityResult != ConnectivityResult.none;
-    });
-    debugPrint('Initial connection status: ${_isConnected ? 'ONLINE' : 'OFFLINE'}');
+  Future<void> _initializeConnectivity() async {
+    // Check connectivity saat pertama kali
+    await _checkConnectivity();
+    
+    // Setup listener untuk perubahan koneksi
+    _setupConnectivityListener();
   }
 
-  /// Method untuk setup listener yang akan mendeteksi perubahan koneksi internet
-  void _setupConnectivityListener() {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      final newConnectionStatus = result != ConnectivityResult.none;
+  Future<void> _checkConnectivity() async {
+    if (_isCheckingConnection) return;
+    
+    setState(() => _isCheckingConnection = true);
+    
+    try {
+      final result = await Connectivity().checkConnectivity();
+      final connected = result != ConnectivityResult.none;
       
-      // Hanya update state jika status koneksi berubah
-      if (newConnectionStatus != _isConnected) {
+      if (mounted) {
         setState(() {
-          _isConnected = newConnectionStatus;
+          _isConnected = connected;
+          _isCheckingConnection = false;
         });
-        
-        // Debug print untuk memantau perubahan koneksi
-        debugPrint('Connection status changed: ${_isConnected ? 'ONLINE' : 'OFFLINE'}');
       }
-    });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isConnected = false;
+          _isCheckingConnection = false;
+        });
+      }
+    }
+  }
+
+  void _setupConnectivityListener() {
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen(
+      (ConnectivityResult result) async {
+        // Delay sedikit untuk memastikan perubahan koneksi stabil
+        await Future.delayed(const Duration(milliseconds: 500));
+        await _checkConnectivity();
+      },
+      onError: (error) {
+        if (mounted) {
+          setState(() => _isConnected = false);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Jika tidak ada produk, tampilkan pesan kosong
-    if (widget.products.isEmpty) {
-      return _buildEmptyState();
-    }
-
-    // Tampilkan produk dalam grid layout
-    return _buildProductsGrid();
+    return widget.products.isEmpty ? _buildEmptyState() : _buildProductsGrid();
   }
 
-  /// Widget untuk menampilkan state ketika tidak ada produk yang sesuai filter
   Widget _buildEmptyState() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 64,
-            color: Colors.grey.shade300,
-          ),
+          Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey.shade300),
           const SizedBox(height: 16),
           const Text(
             'Tidak ada produk',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey),
           ),
           const SizedBox(height: 8),
           Text(
             'Coba ganti kata kunci pencarian',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade400,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
           ),
         ],
       ),
     );
   }
 
-  /// Widget untuk menampilkan produk dalam bentuk grid 2 kolom
   Widget _buildProductsGrid() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // 2 kolom
-          crossAxisSpacing: 12, // Jarak horizontal antar item
-          mainAxisSpacing: 12, // Jarak vertikal antar item
-          childAspectRatio: 0.8, // Rasio tinggi/lebar item
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.8,
         ),
         itemCount: widget.products.length,
-        itemBuilder: (context, index) {
-          final product = widget.products[index];
-          return _buildProductCard(product);
-        },
+        itemBuilder: (context, index) => _buildProductCard(widget.products[index]),
       ),
     );
   }
 
-  /// Widget untuk menampilkan card produk individual
   Widget _buildProductCard(Map<String, dynamic> product) {
-    // Debug: print informasi gambar untuk troubleshooting
-    debugPrint('Loading image: ${product['image']} (Type: ${product['imageType']})');
-    
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade100,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.grey.shade100, blurRadius: 8, offset: const Offset(0, 2))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Gambar Produk - Mendukung kedua jenis gambar + auto switch offline/online
+          // Container untuk gambar produk
           ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-            ),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: Container(
               height: 120,
               width: double.infinity,
-              color: Colors.grey.shade100, // Background default
-              child: _buildProductImage(product), // Panggil method untuk build gambar
+              color: Colors.grey.shade100,
+              child: _buildProductImage(product),
             ),
           ),
           
-          // Informasi Produk (nama, kategori, harga, stok)
+          // Container untuk informasi produk
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Nama Produk
                 Text(
                   product['name'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Colors.black87,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 4),
-                
-                // Kategori Produk
+                const SizedBox(height: 4),                
                 Text(
                   product['category'],
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
                 const SizedBox(height: 8),
-                
-                // Harga dan Stok
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Harga Produk
                     Text(
                       'Rp ${_formatCurrency(product['price'])}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.blue,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.blue),
                     ),
-                    
-                    // Stok Produk
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
@@ -607,11 +433,7 @@ class _ProductListState extends State<ProductList> {
                       ),
                       child: Text(
                         '${product['stock']} stok',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey.shade700,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: TextStyle(fontSize: 10, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],
@@ -624,77 +446,66 @@ class _ProductListState extends State<ProductList> {
     );
   }
 
-  /// METHOD Auto switch antara gambar internet dan placeholder saat offline
-  /// - Gambar LOKAL: Selalu tampil (offline/online)
-  /// - Gambar INTERNET: 
-  ///   - OFFLINE: Langsung tampilkan placeholder (tidak loading)
-  ///   - ONLINE: Load gambar dari internet
-
   Widget _buildProductImage(Map<String, dynamic> product) {
-    // Tentukan jenis gambar: default ke 'network' jika tidak ada imageType
     final imageType = product['imageType'] ?? 'network';
+    
     if (imageType == 'asset') {
-      return Image.asset(  // GAMBAR LOKAL (ASSETS) selalu bisa offline/online
-        product['image'], // Path ke file di assets folder
-        fit: BoxFit.cover, // Sesuaikan gambar ke container
-        errorBuilder: (context, error, stackTrace) {
-          // Jika error loading gambar lokal, tampilkan placeholder default
-          debugPrint('Error loading asset image: $error');
-          return _buildDefaultPlaceholder();
-        },
+      // Gambar lokal dari assets
+      return Image.asset(
+        product['image'],
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _buildImagePlaceholder(Icons.coffee_outlined),
       );
     } else {
-      // JIKA OFFLINE: Langsung tampilkan placeholder offline
-      if (!_isConnected) {
-        return _buildOfflinePlaceholder();
-      }
-      
-      // JIKA ONLINE: Load gambar dari internet menggunakan CachedNetworkImage
-      return CachedNetworkImage(
-        imageUrl: product['image'], // URL gambar dari internet
-        fit: BoxFit.cover, // Sesuaikan gambar ke container
-        placeholder: (context, url) {
-          // Tampilkan loading placeholder saat gambar sedang dimuat
-          return _buildLoadingPlaceholder();
-        },
-        errorWidget: (context, url, error) {
-          // Jika error loading gambar internet (URL rusak, server down, dll)
-          debugPrint('Error loading network image: $error');
-          return _buildErrorPlaceholder();
-        },
-      );
+      // Gambar dari internet
+      return _buildNetworkImage(product);
     }
   }
 
-  /// Placeholder DEFAULT - Digunakan untuk gambar lokal yang error
-  Widget _buildDefaultPlaceholder() {
+  Widget _buildNetworkImage(Map<String, dynamic> product) {
+    // Jika tidak ada koneksi internet, langsung tampilkan placeholder
+    if (!_isConnected) {
+      return _buildOfflinePlaceholder();
+    }
+
+    // Jika ada koneksi, gunakan CachedNetworkImage dengan error handling
+    return CachedNetworkImage(
+      imageUrl: product['image'],
+      fit: BoxFit.cover,
+      placeholder: (context, url) => _buildLoadingPlaceholder(),
+      errorWidget: (context, url, error) {
+        // Jika error, coba check koneksi lagi
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _checkConnectivity();
+        });
+        return _buildImagePlaceholder(Icons.broken_image);
+      },
+      // Cache strategy
+      cacheKey: product['image'],
+      maxWidthDiskCache: 400,
+      maxHeightDiskCache: 300,
+    );
+  }
+
+  Widget _buildImagePlaceholder(IconData icon) {
     return Container(
       color: Colors.grey.shade200,
-      child: const Center(
-        child: Icon(
-          Icons.coffee_outlined, // Icon default untuk produk coffee shop
-          color: Colors.grey,
-          size: 40,
-        ),
+      child: Center(
+        child: Icon(icon, color: Colors.grey, size: 40),
       ),
     );
   }
 
-  /// Placeholder OFFLINE - Ditampilkan saat tidak ada koneksi internet
   Widget _buildOfflinePlaceholder() {
     return Container(
       color: Colors.grey.shade200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.wifi_off, // Icon wifi off untuk indikasi offline
-            color: Colors.grey,
-            size: 30,
-          ),
+          const Icon(Icons.wifi_off, color: Colors.grey, size: 30),
           const SizedBox(height: 4),
           Text(
-            'Offline', // Teks indikasi status
+            'Offline',
             style: TextStyle(
               fontSize: 10,
               color: Colors.grey.shade600,
@@ -702,7 +513,7 @@ class _ProductListState extends State<ProductList> {
             ),
           ),
           Text(
-            'No Internet', // Teks tambahan
+            'No Internet',
             style: TextStyle(
               fontSize: 8,
               color: Colors.grey.shade500,
@@ -713,7 +524,6 @@ class _ProductListState extends State<ProductList> {
     );
   }
 
-  /// Placeholder LOADING - Ditampilkan saat gambar dari internet sedang dimuat
   Widget _buildLoadingPlaceholder() {
     return Container(
       color: Colors.grey.shade200,
@@ -730,47 +540,18 @@ class _ProductListState extends State<ProductList> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Loading...', // Teks indikasi loading
-            style: TextStyle(
-              fontSize: 9,
-              color: Colors.grey.shade600,
-            ),
+            'Loading...',
+            style: TextStyle(fontSize: 9, color: Colors.grey.shade600),
           ),
         ],
       ),
     );
   }
 
-  /// Placeholder ERROR - Ditampilkan saat gagal load gambar dari internet
-  Widget _buildErrorPlaceholder() {
-    return Container(
-      color: Colors.grey.shade200,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.broken_image, // Icon broken image untuk indikasi error
-            color: Colors.grey,
-            size: 30,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Failed to load', // Teks indikasi gagal load
-            style: TextStyle(
-              fontSize: 9,
-              color: Colors.grey.shade600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Method untuk format mata uang 
   String _formatCurrency(int amount) {
     return amount.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (m) => '${m[1]}.', // Tambahkan titik sebagai pemisah ribuan
+      (m) => '${m[1]}.',
     );
   }
 }

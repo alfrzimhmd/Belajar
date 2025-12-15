@@ -5,6 +5,7 @@ import 'splashscreen/splashscreen.dart';
 
 // Fungsi main adalah titik masuk utama aplikasi Flutter
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // Pastikan binding di-init
   runApp(const MyApp()); // Menjalankan aplikasi dengan widget MyApp
 }
 

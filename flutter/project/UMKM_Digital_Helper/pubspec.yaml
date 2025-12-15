@@ -64,9 +64,15 @@ flutter:
   assets:
     - assets/logo_umkm.png              # Logo utama untuk UI aplikasi (splash screen, header)
     - assets/logo_apk.png               # Logo khusus untuk app icon/launcher icon
-    - assets/produk/matcha_latte.jpg    # Gambar produk Matcha Latte
-    - assets/produk/kopi_susu_gula_aren.jpg  # Gambar produk Kopi Susu Gula Aren
-    - assets/produk/kopi_americano.jpg  # Gambar produk Kopi Americano
+    - assets/produk/matcha_latte.jpg   
+    - assets/produk/kopi_susu_gula_aren.jpg 
+    - assets/produk/kopi_americano.jpg 
+    - assets/produk/es_teh.jpg
+    - assets/produk/sate.jpg
+    - assets/produk/bakso.jpeg
+    - assets/produk/nugget.jpg
+    - assets/produk/kukis.jpg
+    - assets/produk/v60.jpg
 
 # KONFIGURASI AUTO-GENERATE APP ICONS
 flutter_launcher_icons:

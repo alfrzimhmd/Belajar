@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-// Data transaksi untuk hari ini
 final List<Map<String, dynamic>> todayTransactions = [
   {
     'title': 'Penjualan Kopi Susu',
     'date': '13 Oktober 2025, 10.30',
     'amount': 120000,
-    'isIncome': true, // Flag untuk pemasukan
+    'isIncome': true,
   },
   {
     'title': 'Penjualan Americano',
@@ -19,11 +18,24 @@ final List<Map<String, dynamic>> todayTransactions = [
     'title': 'Beli Stok Bensin',
     'date': '13 Oktober 2025, 07.00',
     'amount': 650000,
-    'isIncome': false, // Flag untuk pengeluaran
+    'isIncome': true,
+  },
+
+  {
+    'title': 'Penjualan kopi susu',
+    'date': '13 Oktober 2025, 07.00',
+    'amount': 15000,
+    'isIncome': true,
+  },
+
+  {
+    'title': 'Beli bahan matcha latte',
+    'date': '13 Oktober 2025, 07.00',
+    'amount': 12000,
+    'isIncome': false,
   },
 ];
 
-// Data semua transaksi (histori lengkap)
 final List<Map<String, dynamic>> allTransactions = [
   {
     'title': 'Penjualan Latte',
@@ -49,9 +61,21 @@ final List<Map<String, dynamic>> allTransactions = [
     'amount': 84000,
     'isIncome': true,
   },
+
+  {
+    'title': 'Beli Token Listrik',
+    'date': '7 Oktober 2025, 08.30',
+    'amount': 340000,
+    'isIncome': false,
+  },
+  {
+    'title': 'Bayar Gaji Karyawan',
+    'date': '3 Oktober 2025, 08.30',
+    'amount': 480000,
+    'isIncome': false,
+  },
 ];
 
-// Widget untuk menampilkan list transaksi
 class TransactionList extends StatelessWidget {
   final List<Map<String, dynamic>> transactions;
   final bool showToday;
@@ -64,7 +88,6 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Conditional rendering: tampilkan empty state atau list transaksi
     return transactions.isEmpty
         ? _buildEmptyState(showToday)
         : ListView.builder(
@@ -82,44 +105,44 @@ class TransactionList extends StatelessWidget {
           );
   }
 
-  // Method untuk membangun card transaksi individual
-  Widget _buildTransactionCard(String title, String date, int amount, bool isIncome) {
-    final color = isIncome ? Colors.green : Colors.red; // Warna hijau/merah
-    final icon = isIncome ? LucideIcons.arrowUpRight : LucideIcons.arrowDownLeft;
+  Widget _buildTransactionCard(
+    String title,
+    String date,
+    int amount,
+    bool isIncome,
+  ) {
+    final color = isIncome ? Colors.green : Colors.red;
+    final icon = isIncome
+        ? LucideIcons.arrowUpRight
+        : LucideIcons.arrowDownLeft;
     final category = isIncome ? 'Pemasukan' : 'Pengeluaran';
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12), // Spasi antar card
+      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade100, // Shadow subtle
+            color: Colors.grey.shade100,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
         ],
-        border: Border.all(color: Colors.grey.shade100), // Border subtle
+        border: Border.all(color: Colors.grey.shade100),
       ),
       child: Row(
         children: [
-          // Icon container dengan background color
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: color.withAlpha(25), 
+              color: color.withAlpha(25),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              color: color,
-              size: 18,
-            ),
+            child: Icon(icon, color: color, size: 18),
           ),
           const SizedBox(width: 12),
-          // Content area (title, date, category)
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,9 +166,11 @@ class TransactionList extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    // Category badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(4),
@@ -164,12 +189,11 @@ class TransactionList extends StatelessWidget {
               ],
             ),
           ),
-          // Amount dan status section
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${isIncome ? '+' : '-'} ${_formatCurrency(amount)}', // Symbol +/-
+                '${isIncome ? '+' : '-'} ${_formatCurrency(amount)}',
                 style: TextStyle(
                   color: color,
                   fontWeight: FontWeight.bold,
@@ -178,7 +202,7 @@ class TransactionList extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                isIncome ? 'Berhasil' : 'Dibayar', // Status text
+                isIncome ? 'Berhasil' : 'Dibayar',
                 style: TextStyle(
                   fontSize: 10,
                   color: Colors.grey.shade500,
@@ -192,17 +216,12 @@ class TransactionList extends StatelessWidget {
     );
   }
 
-  // Widget untuk state kosong (empty state)
   Widget _buildEmptyState(bool showToday) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            LucideIcons.fileText,
-            size: 64,
-            color: Colors.grey.shade300, // Icon color subtle
-          ),
+          Icon(LucideIcons.fileText, size: 64, color: Colors.grey.shade300),
           const SizedBox(height: 16),
           Text(
             'Tidak ada transaksi',
@@ -213,24 +232,16 @@ class TransactionList extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          // Pesan kontekstual berdasarkan filter
           Text(
             showToday ? 'Tidak ada transaksi hari ini' : 'Belum ada transaksi',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade400,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
           ),
         ],
       ),
     );
   }
 
-  // Method untuk format currency Rupiah
   String _formatCurrency(int amount) {
-    return 'Rp ${amount.toString().replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (m) => '${m[1]}.', // Tambahkan titik sebagai separator ribuan
-    )}';
+    return 'Rp ${amount.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.')}';
   }
 }
